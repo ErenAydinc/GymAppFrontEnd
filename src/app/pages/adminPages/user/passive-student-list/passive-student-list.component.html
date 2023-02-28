@@ -1,0 +1,127 @@
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                Pasif Öğrenciler
+            </h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="getPassiveStudentsForm" (ngSubmit)="getPassiveStudentList()">
+            <div class="row">
+
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Adı</label>
+                    <input type="text" formControlName="searchFirstName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Soyadı</label>
+                    <input type="text" formControlName="searchLastName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <button class="btn btn-sm btn-primary col-md-4"
+                    style="width: 5%; height: 3%;position: sticky;top: 30%;">
+                    <i class="fas fa-search"></i>
+                </button>
+
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" style="font-weight: bold;">Adı</th>
+                    <th scope="col" style="font-weight: bold;">Soyadı</th>
+                    <th scope="col" style="font-weight: bold;">Email</th>
+                    <th scope="col" style="font-weight: bold;">Üyelik Başlangıç Tarihi</th>
+                    <th scope="col" style="font-weight: bold;">Üyelik Bitiş Tarihi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users | paginate:{itemsPerPage:pageSize,
+                    currentPage:page,
+                    totalItems:count
+                } let i = index">
+                    <td>{{user.firstName}}</td>
+                    <td>{{user.lastName}}</td>
+                    <td class="label-bold">{{user.email}}</td>
+                    <td>{{user.memberStartDate | date:'short'}}</td>
+                    <td>{{user.memberEndDate | date:'short'}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary w-1 mb-0" (click)="getPassiveStudent(user.id)"
+                            data-toggle="modal" data-target="#userUpdate" style="margin-left: 2%;">
+                            <i class="fas fa-user-edit" style="color: white;display: contents;"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-4 col-xxl-3">
+                <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
+                    style="width: 75px;" (change)="onTableSizeChange($event)">
+                    <option *ngFor="let size of tableSizes">
+                        {{size}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4 col-xxl-3" style="position: relative; left: 50%;top:25%;">
+                <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)" [responsive]="true" [maxSize]="5">
+                </pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .my-pagination ::ng-deep .ngx-pagination .current {
+        border-radius: 10px;
+    }
+</style>
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="userUpdate" tabindex="-1" aria-labelledby="userUpdateLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userUpdateLabel">Personal Trainer Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="isLoaded">
+                <div>
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="passiveStudentMemberEndDateForm"
+                        (ngSubmit)="updateStudentMemberEndDate()">
+
+                        <div class="row mb-6" style="display: flex;justify-content: center;">
+                            <div class="fv-row" style="width: 50%;">
+                                <label style="display: flex;justify-content: center;"
+                                    class="form-label fw-bolder text-dark fs-6 mb-0">Üyelik Bitiş
+                                    Tarihi</label>
+                                <div class="input-group">
+                                    <input class="form-control" formControlName="memberEndDate" placeholder="yyyy-mm-dd"
+                                        name="dpend" type="text" ngbDatepicker #e="ngbDatepicker" />
+                                    <button class="btn btn-outline-primary bi bi-calendar3"
+                                        style="padding-bottom: 1%;display: flex;background-color: #E4E6EF;"
+                                        (click)="e.toggle()" type="button"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5">
+                                <ng-container>
+                                    <span class="indicator-label">Güncelle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

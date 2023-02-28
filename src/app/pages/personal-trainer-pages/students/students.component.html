@@ -1,0 +1,80 @@
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                Öğrenciler
+                <!-- <small>sub title</small> -->
+            </h3>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- <form [formGroup]="getPersonalTrainerStudentsForm" (ngSubmit)="getPersonalTrainerStudentByPersonalTrainerId()">
+            <div class="row">
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Adı</label>
+                    <input type="text" formControlName="searchFirstName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Soyadı</label>
+                    <input type="text" formControlName="searchLastName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <button class="btn btn-sm btn-primary col-md-4"
+                    style="width: 5%; height: 3%;position: sticky;top: 30%;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form> -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" style="font-weight: bold;">Adı</th>
+                    <th scope="col" style="font-weight: bold;">Soyadı</th>
+                    <th scope="col" style="font-weight: bold;">Email</th>
+                </tr>
+            </thead>
+            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+            <tbody>
+                <tr *ngFor="let personalTrainerStudentDto of personalTrainerStudentsDto | paginate:{itemsPerPage:pageSize,
+                    currentPage:page,
+                    totalItems:count
+                } let i = index">
+                    <td>{{personalTrainerStudentDto.studentFirstName}}</td>
+                    <td>{{personalTrainerStudentDto.studentLastName}}</td>
+                    <td>{{personalTrainerStudentDto.studentEmail}}</td>
+                    <td>
+                        <!-- user's Movements    -->
+                        <button class="btn btn-sm btn-info w-1 mb-0" style="margin-left: 2%;"
+                            routerLink="/gymapp/personaltrainer/studentsmovements/{{personalTrainerStudentDto.studentId}}">
+                            <i class="fas fa-angle-double-right" style="color: white;display: contents;"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row" style="padding-top: 3%;">
+            <div class="col-md-4 col-xxl-3">
+                <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
+                    style="width: 75px;" (change)="onTableSizeChange($event)">
+                    <option *ngFor="let size of tableSizes">
+                        {{size}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4 col-xxl-3" style="position: relative; left: 50%;top:25%;">
+                <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)" [responsive]="true" [maxSize]="5">
+                </pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .my-pagination ::ng-deep .ngx-pagination .current {
+        border-radius: 10px;
+    }
+</style>
+

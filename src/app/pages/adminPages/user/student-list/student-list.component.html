@@ -1,0 +1,359 @@
+
+
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                Öğrenciler
+                <!-- <small>sub title</small> -->
+            </h3>
+        </div>
+        <app-student-create style="position: relative;top:10px"></app-student-create>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="getStudentsForm" (ngSubmit)="getStudents()">
+            <div class="row">
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Adı</label>
+                    <input type="text" formControlName="searchFirstName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Soyadı</label>
+                    <input type="text" formControlName="searchLastName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <button class="btn btn-sm btn-primary col-md-4"
+                    style="width: 5%; height: 3%;position: sticky;top: 30%;">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="btn btn-sm btn-danger col-md-4" style="position: relative;width: 10%;left: 55%;" routerLink="/gymapp/admin/passiveStudents">Üyelik Süresi Biten Öğrenciler</button>
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" style="font-weight: bold;">Adı</th>
+                    <th scope="col" style="font-weight: bold;">Soyadı</th>
+                    <th scope="col" style="font-weight: bold;">Email</th>
+                    <th scope="col" style="font-weight: bold;">Üyelik Başlangıç Tarihi</th>
+                    <th scope="col" style="font-weight: bold;">Üyelik Bitiş Tarihi</th>
+                </tr>
+            </thead>
+            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+            <tbody>
+                <tr *ngFor="let user of users | paginate:{itemsPerPage:pageSize,
+                    currentPage:page,
+                    totalItems:count
+                } let i = index">
+                    <td>{{user.firstName}}</td>
+                    <td>{{user.lastName}}</td>
+                    <td class="label-bold">{{user.email}}</td>
+                    <td>{{user.memberStartDate | date:'dd/MM/y'}}</td>
+                    <td>{{user.memberEndDate | date:'dd/MM/y'}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary w-1 mb-0" (click)="getStudent(user.id)"
+                            data-toggle="modal" data-target="#userUpdate" style="margin-left: 2%;">
+                            <i class="fas fa-user-edit" style="color: white;display: contents;"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning w-1 mb-0" style="margin-left: 2%;"
+                            (click)="[getPersonalTrainers(),getStudent(user.id),getPersonalTrainerStudentByStudentId(user.id)]"
+                            data-toggle="modal" data-target="#personalTrainerForStudent">
+                            <i class="fas fa-user-friends" style="color: white;display: contents;">
+                            </i>
+                        </button>
+                        <!-- Body Information -->
+                        <button class="btn btn-sm btn-success w-1 mb-0" (click)="getBodyInformationByUserId(user.id)"
+                            data-toggle="modal" data-target="#studentBodyInfo" style="margin-left: 2%;">
+                            <i class="fas fa-ruler" style="color: white;display: contents;"></i>
+                        </button>
+                        <!-- delete Student -->
+                        <button class="btn btn-sm btn-danger w-1 mb-0" (click)="deleteStudent(user.id)"
+                            style="margin-left: 2%;">
+                            <i class="far fa-trash-alt" style="color: white;display: contents;"></i>
+                        </button>
+                        <!-- user's Movements    -->
+                        <button class="btn btn-sm btn-info w-1 mb-0" style="margin-left: 2%;"
+                            routerLink="/gymapp/admin/usersmovements/{{user.id}}">
+                            <i class="fas fa-angle-double-right" style="color: white;display: contents;"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-4 col-xxl-3">
+                <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
+                    style="width: 75px;" (change)="onTableSizeChange($event)">
+                    <option *ngFor="let size of tableSizes">
+                        {{size}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4 col-xxl-3" style="position: relative; left: 50%;top:25%;">
+                <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)" [responsive]="true" [maxSize]="5">
+                </pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .my-pagination ::ng-deep .ngx-pagination .current {
+        border-radius: 10px;
+    }
+</style>
+
+
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="userUpdate" tabindex="-1" aria-labelledby="userUpdateLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userUpdateLabel">Personal Trainer Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="isLoaded">
+                <div>
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="updateStudentForm"
+                        (ngSubmit)="update(user.id)">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Adı</label>
+                            <input class="form-control form-control-lg form-control-solid" [(ngModel)]="user.firstName"
+                                type="firstName" name="firstName" formControlName="firstName" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Soyadı</label>
+                            <input class="form-control form-control-lg form-control-solid" [(ngModel)]="user.lastName"
+                                type="lastName" name="lastName" formControlName="lastName" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Email</label>
+                            <input class="form-control form-control-lg form-control-solid" [(ngModel)]="user.email"
+                                type="email" name="email" formControlName="email" autocomplete="off" />
+                        </div>
+
+
+                        <div class="accordion" id="accordionExample" class="fv-row mb-10">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        Üyelik Bitiş Tarihi
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        <div class="row" style="display: flex;justify-content: center;">
+                                            <div class="fv-row" style="width: 50%;">
+                                                <label style="display: flex;justify-content: center;"
+                                                    class="form-label fw-bolder text-dark fs-6 mb-0">Üyelik Bitiş
+                                                    Tarihi</label>
+                                                <div class="input-group">
+                                                    <input class="form-control" formControlName="memberEndDate"
+                                                        placeholder="yyyy-mm-dd" name="dpend" type="text" ngbDatepicker
+                                                        #e="ngbDatepicker" />
+                                                    <button class="btn btn-outline-primary bi bi-calendar3"
+                                                        style="padding-bottom: 1%;display: flex;background-color: #E4E6EF;"
+                                                        (click)="e.toggle()" type="button"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5">
+                                <ng-container>
+                                    <span class="indicator-label">Güncelle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EditModal Student Body Info -->
+<div class="modal fade" id="studentBodyInfo" tabindex="-1" aria-labelledby="studentBodyInfo" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="studentBodyInfo">Body Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="isBodyInformationLoaded">
+                <div *ngIf="bodyInformationDto!=null">
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="updateBodyInformationForm"
+                        (ngSubmit)="updateBodyInformation()">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Uzunluk (173)</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.length" type="number" name="length"
+                                formControlName="length" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Kilo (93.2)</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.weight" type="number" name="weight"
+                                formControlName="weight" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Kol</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.arm" type="number" name="arm" formControlName="arm"
+                                autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Omuz</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.shoulder" type="number" name="shoulder"
+                                formControlName="shoulder" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Göğüs</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.chest" type="number" name="chest"
+                                formControlName="chest" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Bacak</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.leg" type="number" name="leg" formControlName="leg"
+                                autocomplete="off" />
+                        </div>
+                       
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5"
+                                [disabled]="updateBodyInformationForm.invalid">
+                                <ng-container>
+                                    <span class="indicator-label">Ekle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+                <div *ngIf="bodyInformationDto==null">
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="createBodyInformationForm"
+                        (ngSubmit)="createBodyInformation()">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Uzunluk (173)</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="length"
+                                formControlName="length" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Kilo (93.2)</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="weight"
+                                formControlName="weight" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Kol</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="arm"
+                                formControlName="arm" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Omuz</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="shoulder"
+                                formControlName="shoulder" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Göğüs</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="chest"
+                                formControlName="chest" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Bacak</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="leg"
+                                formControlName="leg" autocomplete="off" />
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5"
+                                [disabled]="createBodyInformationForm.invalid">
+                                <ng-container>
+                                    <span class="indicator-label">Ekle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PersonalTrainerForStudent -->
+<div class="modal fade" id="personalTrainerForStudent" tabindex="-1" aria-labelledby="personalTrainerForStudentLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="personalTrainerForStudentLabel">Öğrenciye Eğitmen Atama</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="personalTrainerIsLoaded">
+                <div>
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="createStudentPersonalTrainerForm"
+                        (ngSubmit)="personalTrainerStudent==null? createStudentPersonalTrainer(user.id):updatePersonalTrainerStudent(personalTrainerStudent.id,user.id)">
+                        <div class="form-group">
+                            <div class="mb-3 border-bottom">
+                            <h4 >Eğitmen Listesi</h4>
+                        </div>
+                            <div>
+
+                                <div class="form-check col-md-4"
+                                    *ngFor="let personalTrainer of personalTrainers;index as i">
+                                    <label class="radio">
+
+                                        <input *ngIf="personalTrainerStudent!=null" class="form-check-input"
+                                            [checked]="personalTrainer.id==personalTrainerStudent.personalTrainerId?true:false"
+                                            (click)="setCheckedPersonalTrainer(personalTrainer.id)" type="radio"
+                                            name="flexRadioDefault" id="flexRadioDefault1" />
+                                        <input *ngIf="personalTrainerStudent==null" class="form-check-input"
+                                            (click)="setCheckedPersonalTrainer(personalTrainer.id)" type="radio"
+                                            name="flexRadioDefault" id="flexRadioDefault1" />
+                                        <span></span>
+                                        <span href="#" class="text-dark fw-bolder text-hover-primary fs-6">
+                                            {{personalTrainer.name}} </span><span
+                                            class="text-muted d-block fw-bold">Öğrenci
+                                            Sayısı : {{personalTrainer.studentCount}}</span>
+
+
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-10 mb-5">
+                                <ng-container>
+                                    <span class="indicator-label">Ekle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

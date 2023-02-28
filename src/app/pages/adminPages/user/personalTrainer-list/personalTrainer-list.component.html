@@ -1,0 +1,190 @@
+<div class="spinner spinner-track spinner-primary spinner-lg mr-15" *ngIf="isLoaded==false"></div>
+
+
+<div class="card card-custom gutter-b" *ngIf="isLoaded==true">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                Eğitmenler
+                <!-- <small>sub title</small> -->
+            </h3>
+        </div>
+        <app-personalTrainer-create style="position: relative;top:10px"></app-personalTrainer-create>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="getStudentsForm" (ngSubmit)="getPersonalTrainers()">
+            <div class="row">
+
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Adı</label>
+                    <input type="text" formControlName="searchFirstName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Soyadı</label>
+                    <input type="text" formControlName="searchLastName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <button class="btn btn-sm btn-primary col-md-4"
+                    style="width: 5%; height: 3%;position: sticky;top: 30%;">
+                    <i class="fas fa-search"></i>
+                </button>
+
+            </div>
+        </form>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" style="font-weight: bold;">Adı</th>
+                    <th scope="col" style="font-weight: bold;">Soyadı</th>
+                    <th scope="col" style="font-weight: bold;">Email</th>
+                </tr>
+            </thead>
+            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+            <tbody>
+                <tr *ngFor="let user of users | paginate:{itemsPerPage:pageSize,
+                    currentPage:page,
+                    totalItems:count
+                } let i = index">
+                    <td>{{user.firstName}}</td>
+                    <td>{{user.lastName}}</td>
+                    <td class="label-bold">{{user.email}}</td>
+                    <!-- Button trigger modal Edit -->
+                    <span>
+                        <span class="dot btn-primary" (click)="getPersonalTrainer(user.id)"
+                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;" data-toggle="modal"
+                            data-target="#userUpdate">
+                            <i class="fas fa-user-edit" style="color: white;"></i>
+                        </span>
+                        <!-- Button trigger modal User Operation Claim -->
+                        <span class="dot btn-info"
+                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;margin-left: 3%;"
+                            (click)="[getOperationClaims(),getPersonalTrainer(user.id),getUserOperationClaims(user.id)]" data-toggle="modal"
+                            data-target="#userOperationClaimModal">
+                            <i class="fas fa-user-cog" style="color: white;"></i>
+                        </span>
+                    </span>
+                    <button (click)="deletePersonalTrainer(user.id)"
+                        class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-4 col-xxl-3">
+                <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
+                    style="width: 75px;" (change)="onTableSizeChange($event)">
+                    <option *ngFor="let size of tableSizes">
+                        {{size}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4 col-xxl-3" style="position: relative; left: 60%;top:25%;">
+                <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)">
+
+                </pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .my-pagination ::ng-deep .ngx-pagination .current {
+        border-radius: 10px;
+    }
+</style>
+
+
+<!-- EditModal -->
+<div class="modal fade" id="userUpdate" tabindex="-1" aria-labelledby="userUpdateLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userUpdateLabel">Personal Trainer Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="isLoadedByGetPersonalTrainer">
+                <div>
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="updatePersonalTrainerForm"
+                        (ngSubmit)="update(user.id)">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Adı</label>
+                            <input class="form-control form-control-lg form-control-solid" [(ngModel)]="user.firstName"
+                                type="firstName" name="firstName" formControlName="firstName" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Soyadı</label>
+                            <input class="form-control form-control-lg form-control-solid" [(ngModel)]="user.lastName"
+                                type="lastName" name="lastName" formControlName="lastName" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Email</label>
+                            <input class="form-control form-control-lg form-control-solid" [(ngModel)]="user.email"
+                                type="email" name="email" formControlName="email" autocomplete="off" />
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5"
+                                [disabled]="updatePersonalTrainerForm.invalid">
+                                <ng-container>
+                                    <span class="indicator-label">Güncelle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- UserOperationClaim -->
+
+<!-- Modal-->
+<div class="modal fade" id="userOperationClaimModal" tabindex="-1" role="dialog"
+    aria-labelledby="userOperationClaimModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userOperationClaimModalLabel">Operation Claim</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <i aria-hidden="true" class="ki ki-close"></i>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="isUserOperationClaimsLoaded">
+                <form (ngSubmit)="addUserOperationClaim(user.id)" class="form-group row"
+                    style="justify-content: center;">
+                    <div class="col-9 col-form-label">
+                        <div class="checkbox-inline" *ngFor="let operationClaim of operationClaims;index as i;">
+                            <label class="checkbox" style="margin-left: 15%;" [hidden]="operationClaim.id==1?true:false">
+                                <div *ngIf="userOperationClaims.length>0">
+                                <input id="1" type="checkbox" class="form-check-input" style="left: 14%;"
+                                *ngFor="let userOperationClaim of userOperationClaims;index as e"
+                                [checked]="userOperationClaim.operationClaimIds[0]==operationClaim.id?true:false || userOperationClaim.operationClaimIds[1]==operationClaim.id?true:false|| userOperationClaim.operationClaimIds[2]==operationClaim.id?true:false"
+                                (change)="setCheckbox(operationClaim.id,i)" />
+                            </div>
+                            <div *ngIf="userOperationClaims.length<=0">
+                                <input style="left: 14%;" type="checkbox" id="2" class="form-check-input" 
+                                    (change)="setCheckbox(operationClaim.id,i)"/>
+                                </div>
+                                <span></span>
+                                {{operationClaim.name}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-lg btn-primary w-100 mb-5">
+                            <ng-container>
+                                <span class="indicator-label">Create</span>
+                            </ng-container>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label" *ngIf="userName">
+               {{userName}} Hareket Set ve Tekrarları
+                <!-- <small>sub title</small> -->
+            </h3>
+            
+            <h3 class="card-label" *ngIf="userName==null">
+                Hareket Set ve Tekrarları
+                 <!-- <small>sub title</small> -->
+             </h3>
+        </div>
+        <app-users-movements-create [userId]="userId" style="position: relative;top:10px"></app-users-movements-create>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
+                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
+                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
+                </tr>
+            </thead>
+            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+            <tbody>
+                <tr *ngFor="let usersMovement of usersMovements | paginate:{itemsPerPage:pageSize,
+                    currentPage:page,
+                    totalItems:count
+                } let i = index">
+                    <td>{{usersMovement.movementName}}</td>
+                    <td>{{usersMovement.setNumber}}</td>
+                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
+                        <span>
+                            <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
+                                (click)="getMovements()"
+                                style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
+                                data-toggle="modal" data-target="#userUpdate">
+                                <i class="fas fa-user-edit" style="color: white;"></i>
+                            </span>
+                        </span>
+                        <button (click)="deleteStudentsMovement(usersMovement.id)"
+                        class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+                    <!-- <button (click)="deleteStudent(user.id)"
+                        class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+                    <button class="btn btn-sm btn-info w-1 mb-0" style="margin-left: 2%;" routerLink="/gymapp/usersmovements/{{user.id}}">
+                        <i class="fas fa-arrow-circle-right"></i>
+                    </button> -->
+                </tr>
+            </tbody>
+        </table>
+        <!-- <div class="row">
+            <div class="col-md-4 col-xxl-3">
+                <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
+                    style="width: 75px;" (change)="onTableSizeChange($event)">
+                    <option *ngFor="let size of tableSizes">
+                        {{size}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4 col-xxl-3" style="position: relative; left: 60%;top:25%;">
+                <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)">
+
+                </pagination-controls>
+            </div>
+        </div> -->
+    </div>
+</div>
+
+
+
+<!-- EditModal -->
+<div class="modal fade" id="userUpdate" tabindex="-1"
+    aria-labelledby="userUpdateLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userUpdateLabel">Güncelleme</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="getUserMovementByIdIsLoaded">
+                <div>
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="updateStudentsMovementForm"
+                        (ngSubmit)="updateStudentsMovement(usersMovement.id,usersMovement.userId)">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Hareketler</label>
+                            <ng-select style="position: relative;top:10px" [items]="movements" bindLabel="name"
+                                autofocus bindValue="id" [(ngModel)]="selectedMovement" formControlName="movementId">
+                            </ng-select>
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Set Sayısı</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number"
+                                name="setNumber" [(ngModel)]="usersMovement.setNumber" formControlName="setNumber" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Tekrar Sayısı</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number"
+                                name="repetitionNumber" [(ngModel)]="usersMovement.repetitionNumber" formControlName="repetitionNumber" autocomplete="off" />
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5"
+                                [disabled]="updateStudentsMovementForm.invalid">
+                                <ng-container>
+                                    <span class="indicator-label">Güncelle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
