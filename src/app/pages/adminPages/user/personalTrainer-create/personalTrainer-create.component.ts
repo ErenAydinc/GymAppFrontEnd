@@ -62,6 +62,7 @@ export class PersonalTrainerCreateComponent implements OnInit {
         this.f.password.value,
         this.f.firstName.value,
         this.f.lastName.value,
+        null,
         this.f.type.value,
         true,
         newStartDate,

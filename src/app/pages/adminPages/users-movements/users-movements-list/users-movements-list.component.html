@@ -1,78 +1,393 @@
-<div class="card card-custom gutter-b">
-    <div class="card-header">
-        <div class="card-title">
-            <h3 class="card-label" *ngIf="userName">
-               {{userName}} Hareket Set ve Tekrarları
-                <!-- <small>sub title</small> -->
-            </h3>
-            
-            <h3 class="card-label" *ngIf="userName==null">
-                Hareket Set ve Tekrarları
-                 <!-- <small>sub title</small> -->
-             </h3>
-        </div>
-        <app-users-movements-create [userId]="userId" style="position: relative;top:10px"></app-users-movements-create>
-    </div>
-    <div class="card-body">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
-                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
-                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
-                </tr>
-            </thead>
-            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
-            <tbody>
-                <tr *ngFor="let usersMovement of usersMovements | paginate:{itemsPerPage:pageSize,
-                    currentPage:page,
-                    totalItems:count
-                } let i = index">
-                    <td>{{usersMovement.movementName}}</td>
-                    <td>{{usersMovement.setNumber}}</td>
-                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
-                        <span>
-                            <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
-                                (click)="getMovements()"
-                                style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
-                                data-toggle="modal" data-target="#userUpdate">
-                                <i class="fas fa-user-edit" style="color: white;"></i>
-                            </span>
-                        </span>
-                        <button (click)="deleteStudentsMovement(usersMovement.id)"
-                        class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
-                    <!-- <button (click)="deleteStudent(user.id)"
-                        class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
-                    <button class="btn btn-sm btn-info w-1 mb-0" style="margin-left: 2%;" routerLink="/gymapp/usersmovements/{{user.id}}">
-                        <i class="fas fa-arrow-circle-right"></i>
-                    </button> -->
-                </tr>
-            </tbody>
-        </table>
-        <!-- <div class="row">
-            <div class="col-md-4 col-xxl-3">
-                <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
-                    style="width: 75px;" (change)="onTableSizeChange($event)">
-                    <option *ngFor="let size of tableSizes">
-                        {{size}}
-                    </option>
-                </select>
-            </div>
-            <div class="col-md-4 col-xxl-3" style="position: relative; left: 60%;top:25%;">
-                <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
-                    (pageChange)="onTableDataChange($event)">
+<app-users-movements-create [userId]="userId" style="position: absolute;right:5%;top: 18%;"></app-users-movements-create>
 
-                </pagination-controls>
+
+
+<!-- Günler -->
+
+<div class="accordion" style="padding-top: 5%;" id="kt_accordion_1">
+    <div class="accordion-item mb-5">
+        <h2 class="accordion-header" id="kt_accordion_1_header_1">
+            <button class="accordion-button fs-4 fw-semibold collapsed" (click)="getUsersMovementsBySelectedDay(0,1)" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_1" aria-expanded="false" aria-controls="kt_accordion_1_body_1">
+                Pazartesi
+            </button>
+        </h2>
+        <div id="kt_accordion_1_body_1" class="accordion-collapse collapse" aria-labelledby="kt_accordion_1_header_1" data-bs-parent="#kt_accordion_1">
+            <div class="accordion-body">
+                <div class="card card-custom gutter-b">
+                    <!-- <div class="card-header">
+                </div> -->
+                    <div class="card-body" *ngIf="usersMovementsIsLoaded">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
+                                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Ağırlık</th>
+                                </tr>
+                            </thead>
+                            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+                            <tbody>
+                                <tr *ngFor="let usersMovement of usersMovementsBySelectedDay | paginate:{itemsPerPage:pageSize,
+                                currentPage:page,
+                                totalItems:count
+                            } let i = index">
+                                    <td>{{usersMovement.movementName}}</td>
+                                    <td>{{usersMovement.setNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.weight}}</td>
+                                    <span>
+                                        <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
+                                            (click)="getMovements()"
+                                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
+                                            data-toggle="modal" data-target="#userUpdate">
+                                            <i class="fas fa-user-edit" style="color: white;"></i>
+                                        </span>
+                                    </span>
+                                    <button (click)="deleteStudentsMovement(usersMovement.id)"
+                                    class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-        </div> -->
+        </div>
+    </div>
+    <div class="accordion-item mb-5">
+        <h2 class="accordion-header" id="kt_accordion_1_header_1">
+            <button class="accordion-button fs-4 fw-semibold collapsed" (click)="getUsersMovementsBySelectedDay(0,2)" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_2" aria-expanded="false" aria-controls="kt_accordion_1_body_2">
+                Salı
+            </button>
+        </h2>
+        <div id="kt_accordion_1_body_2" class="accordion-collapse collapse" aria-labelledby="kt_accordion_1_header_2" data-bs-parent="#kt_accordion_1">
+            <div class="accordion-body">
+                <div class="card card-custom gutter-b">
+                    <!-- <div class="card-header">
+                </div> -->
+                    <div class="card-body" *ngIf="usersMovementsIsLoaded">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
+                                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Ağırlık</th>
+                                </tr>
+                            </thead>
+                            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+                            <tbody>
+                                <tr *ngFor="let usersMovement of usersMovementsBySelectedDay | paginate:{itemsPerPage:pageSize,
+                                currentPage:page,
+                                totalItems:count
+                            } let i = index">
+                                    <td>{{usersMovement.movementName}}</td>
+                                    <td>{{usersMovement.setNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.weight}}</td>
+                                    <span>
+                                        <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
+                                            (click)="getMovements()"
+                                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
+                                            data-toggle="modal" data-target="#userUpdate">
+                                            <i class="fas fa-user-edit" style="color: white;"></i>
+                                        </span>
+                                    </span>
+                                    <button (click)="deleteStudentsMovement(usersMovement.id)"
+                                    class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item mb-5">
+        <h2 class="accordion-header" id="kt_accordion_1_header_1">
+            <button class="accordion-button fs-4 fw-semibold collapsed" type="button" (click)="getUsersMovementsBySelectedDay(0,3)" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_3" aria-expanded="false" aria-controls="kt_accordion_1_body_3">
+               Çarşamba
+            </button>
+        </h2>
+        <div id="kt_accordion_1_body_3" class="accordion-collapse collapse" aria-labelledby="kt_accordion_1_header_3" data-bs-parent="#kt_accordion_1">
+            <div class="accordion-body">
+                <div class="card card-custom gutter-b">
+                    <!-- <div class="card-header">
+                </div> -->
+                    <div class="card-body" *ngIf="usersMovementsIsLoaded">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
+                                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Ağırlık</th>
+                                </tr>
+                            </thead>
+                            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+                            <tbody>
+                                <tr *ngFor="let usersMovement of usersMovementsBySelectedDay | paginate:{itemsPerPage:pageSize,
+                                currentPage:page,
+                                totalItems:count
+                            } let i = index">
+                                    <td>{{usersMovement.movementName}}</td>
+                                    <td>{{usersMovement.setNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.weight}}</td>
+                                    <span>
+                                        <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
+                                            (click)="getMovements()"
+                                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
+                                            data-toggle="modal" data-target="#userUpdate">
+                                            <i class="fas fa-user-edit" style="color: white;"></i>
+                                        </span>
+                                    </span>
+                                    <button (click)="deleteStudentsMovement(usersMovement.id)"
+                                    class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item mb-5">
+        <h2 class="accordion-header" id="kt_accordion_1_header_1">
+            <button class="accordion-button fs-4 fw-semibold collapsed" (click)="getUsersMovementsBySelectedDay(0,4)" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_4" aria-expanded="false" aria-controls="kt_accordion_1_body_4">
+                Perşembe
+            </button>
+        </h2>
+        <div id="kt_accordion_1_body_4" class="accordion-collapse collapse " aria-labelledby="kt_accordion_1_header_4" data-bs-parent="#kt_accordion_1">
+            <div class="accordion-body">
+                <div class="card card-custom gutter-b">
+                    <!-- <div class="card-header">
+                </div> -->
+                    <div class="card-body" *ngIf="usersMovementsIsLoaded">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
+                                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Ağırlık</th>
+                                </tr>
+                            </thead>
+                            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+                            <tbody>
+                                <tr *ngFor="let usersMovement of usersMovementsBySelectedDay | paginate:{itemsPerPage:pageSize,
+                                currentPage:page,
+                                totalItems:count
+                            } let i = index">
+                                    <td>{{usersMovement.movementName}}</td>
+                                    <td>{{usersMovement.setNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.weight}}</td>
+                                    <span>
+                                        <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
+                                            (click)="getMovements()"
+                                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
+                                            data-toggle="modal" data-target="#userUpdate">
+                                            <i class="fas fa-user-edit" style="color: white;"></i>
+                                        </span>
+                                    </span>
+                                    <button (click)="deleteStudentsMovement(usersMovement.id)"
+                                    class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item mb-5">
+        <h2 class="accordion-header" id="kt_accordion_1_header_1">
+            <button class="accordion-button fs-4 fw-semibold collapsed" type="button" (click)="getUsersMovementsBySelectedDay(0,5)" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_5" aria-expanded="false" aria-controls="kt_accordion_1_body_5">
+                Cuma
+            </button>
+        </h2>
+        <div id="kt_accordion_1_body_5" class="accordion-collapse collapse " aria-labelledby="kt_accordion_1_header_5" data-bs-parent="#kt_accordion_1">
+            <div class="accordion-body">
+                <div class="card card-custom gutter-b">
+                    <!-- <div class="card-header">
+                </div> -->
+                    <div class="card-body" *ngIf="usersMovementsIsLoaded">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
+                                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Ağırlık</th>
+                                </tr>
+                            </thead>
+                            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+                            <tbody>
+                                <tr *ngFor="let usersMovement of usersMovementsBySelectedDay | paginate:{itemsPerPage:pageSize,
+                                currentPage:page,
+                                totalItems:count
+                            } let i = index">
+                                    <td>{{usersMovement.movementName}}</td>
+                                    <td>{{usersMovement.setNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.weight}}</td>
+                                    <span>
+                                        <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
+                                            (click)="getMovements()"
+                                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
+                                            data-toggle="modal" data-target="#userUpdate">
+                                            <i class="fas fa-user-edit" style="color: white;"></i>
+                                        </span>
+                                    </span>
+                                    <button (click)="deleteStudentsMovement(usersMovement.id)"
+                                    class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item mb-5">
+        <h2 class="accordion-header" id="kt_accordion_1_header_1">
+            <button class="accordion-button fs-4 fw-semibold collapsed" type="button" (click)="getUsersMovementsBySelectedDay(0,6)" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_6" aria-expanded="false" aria-controls="kt_accordion_1_body_6">
+                Cumartesi
+            </button>
+        </h2>
+        <div id="kt_accordion_1_body_6" class="accordion-collapse collapse " aria-labelledby="kt_accordion_1_header_6" data-bs-parent="#kt_accordion_1">
+            <div class="accordion-body">
+                <div class="card card-custom gutter-b">
+                    <!-- <div class="card-header">
+                </div> -->
+                    <div class="card-body" *ngIf="usersMovementsIsLoaded">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
+                                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Ağırlık</th>
+                                </tr>
+                            </thead>
+                            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+                            <tbody>
+                                <tr *ngFor="let usersMovement of usersMovementsBySelectedDay | paginate:{itemsPerPage:pageSize,
+                                currentPage:page,
+                                totalItems:count
+                            } let i = index">
+                                    <td>{{usersMovement.movementName}}</td>
+                                    <td>{{usersMovement.setNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.weight}}</td>
+                                    <span>
+                                        <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
+                                            (click)="getMovements()"
+                                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
+                                            data-toggle="modal" data-target="#userUpdate">
+                                            <i class="fas fa-user-edit" style="color: white;"></i>
+                                        </span>
+                                    </span>
+                                    <button (click)="deleteStudentsMovement(usersMovement.id)"
+                                    class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item mb-5">
+        <h2 class="accordion-header" id="kt_accordion_1_header_1">
+            <button class="accordion-button fs-4 fw-semibold collapsed" type="button" (click)="getUsersMovementsBySelectedDay(0,7)" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_7" aria-expanded="false" aria-controls="kt_accordion_1_body_7">
+                Pazar
+            </button>
+        </h2>
+        <div id="kt_accordion_1_body_7" class="accordion-collapse collapse" aria-labelledby="kt_accordion_1_header_7" data-bs-parent="#kt_accordion_1">
+            <div class="accordion-body">
+                <div class="card card-custom gutter-b">
+                    <!-- <div class="card-header">
+                </div> -->
+                    <div class="card-body" *ngIf="usersMovementsIsLoaded">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="font-weight: bold;">Hareket Adi</th>
+                                    <th scope="col" style="font-weight: bold;">Set Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Tekrar Sayısı</th>
+                                    <th scope="col" style="font-weight: bold;">Ağırlık</th>
+                                </tr>
+                            </thead>
+                            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+                            <tbody>
+                                <tr *ngFor="let usersMovement of usersMovementsBySelectedDay | paginate:{itemsPerPage:pageSize,
+                                currentPage:page,
+                                totalItems:count
+                            } let i = index">
+                                    <td>{{usersMovement.movementName}}</td>
+                                    <td>{{usersMovement.setNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.repetitionNumber}}</td>
+                                    <td class="label-bold">{{usersMovement.weight}}</td>
+                                    <span>
+                                        <span class="dot btn-primary" (click)="getUsersMovementById(usersMovement.id)"
+                                            (click)="getMovements()"
+                                            style="padding: 10px;border-radius: 10px;position: relative;top: 20%;"
+                                            data-toggle="modal" data-target="#userUpdate">
+                                            <i class="fas fa-user-edit" style="color: white;"></i>
+                                        </span>
+                                    </span>
+                                    <button (click)="deleteStudentsMovement(usersMovement.id)"
+                                    class="btn btn-sm btn-danger w-1 mb-0 far fa-trash-alt"></button>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- EditModal -->
-<div class="modal fade" id="userUpdate" tabindex="-1"
-    aria-labelledby="userUpdateLabel" aria-hidden="true">
+<div class="modal fade" id="userUpdate" tabindex="-1" aria-labelledby="userUpdateLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -94,12 +409,14 @@
                         <div class="fv-row mb-10">
                             <label class="form-label fs-6 fw-bolder text-dark">Set Sayısı</label>
                             <input class="form-control form-control-lg form-control-solid" type="number"
-                                name="setNumber" [(ngModel)]="usersMovement.setNumber" formControlName="setNumber" autocomplete="off" />
+                                name="setNumber" [(ngModel)]="usersMovement.setNumber" formControlName="setNumber"
+                                autocomplete="off" />
                         </div>
                         <div class="fv-row mb-10">
                             <label class="form-label fs-6 fw-bolder text-dark">Tekrar Sayısı</label>
                             <input class="form-control form-control-lg form-control-solid" type="number"
-                                name="repetitionNumber" [(ngModel)]="usersMovement.repetitionNumber" formControlName="repetitionNumber" autocomplete="off" />
+                                name="repetitionNumber" [(ngModel)]="usersMovement.repetitionNumber"
+                                formControlName="repetitionNumber" autocomplete="off" />
                         </div>
                         <!--begin::Action-->
                         <div class="text-center">

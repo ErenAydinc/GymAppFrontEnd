@@ -1,0 +1,191 @@
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">
+                Müşteriler
+                <!-- <small>sub title</small> -->
+            </h3>
+        </div>
+        <app-customer-create style="position: relative"></app-customer-create>
+    </div>
+    <div class="card-body">
+        <!-- <form [formGroup]="getPersonalTrainerStudentsForm" (ngSubmit)="getPersonalTrainerStudentByPersonalTrainerId()">
+            <div class="row">
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Adı</label>
+                    <input type="text" formControlName="searchFirstName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <div class="col-md-4" style="width: 15%;">
+                    <label>Soyadı</label>
+                    <input type="text" formControlName="searchLastName" class="form-control" name="searhFirstName"
+                        placeholder="Search..." />
+                </div>
+                <button class="btn btn-sm btn-primary col-md-4"
+                    style="width: 5%; height: 3%;position: sticky;top: 30%;">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </form> -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col" style="font-weight: bold;">Adı</th>
+                    <th scope="col" style="font-weight: bold;">Email</th>
+                    <th scope="col" style="font-weight: bold;">Telefon Numarası</th>
+                </tr>
+            </thead>
+            <!-- <tbody *ngIf="users$ | async as users"></tbody> -->
+            <tbody>
+                <tr *ngFor="let customer of customers | paginate:{itemsPerPage:pageSize,
+                    currentPage:page,
+                    totalItems:count
+                } let i = index">
+                    <td>{{customer.name}}</td>
+                    <td>{{customer.email}}</td>
+                    <td>{{customer.phoneNumber}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary w-1 mb-0" (click)="getCustomer(customer.id)"
+                            data-toggle="modal" data-target="#userUpdate" style="margin-left: 2%;">
+                            <i class="fas fa-user-edit" style="color: white;display: contents;"></i>
+                        </button>
+                        <!-- delete Customer -->
+                        <button class="btn btn-sm btn-danger w-1 mb-0" (click)="delete(customer.id)"
+                            style="margin-left: 2%;">
+                            <i class="far fa-trash-alt" style="color: white;display: contents;"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info w-1 mb-0" (click)="selectCustomer = customer.id"
+                            style="margin-left: 2%;" data-toggle="modal" data-target="#userCreate">
+                            <i class="fas fa-user-plus" style="color: white;display: contents;"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row" style="padding-top: 3%;">
+            <div class="col-md-4 col-xxl-3">
+                <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light"
+                    style="width: 75px;" (change)="onTableSizeChange($event)">
+                    <option *ngFor="let size of tableSizes">
+                        {{size}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4 col-xxl-3" style="position: relative; left: 50%;top:25%;">
+                <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                    (pageChange)="onTableDataChange($event)" [responsive]="true" [maxSize]="5">
+                </pagination-controls>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .my-pagination ::ng-deep .ngx-pagination .current {
+        border-radius: 10px;
+    }
+</style>
+
+<!-- Edit Customer Modal -->
+<div class="modal fade" id="userUpdate" tabindex="-1" aria-labelledby="userUpdateLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userUpdateLabel">Personal Trainer Edit</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="customerIsLoaded">
+                <div>
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="updateCustomerForm"
+                        (ngSubmit)="update()">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Müşteri Adı</label>
+                            <input class="form-control form-control-lg form-control-solid" [(ngModel)]="customer.name"
+                                type="name" name="name" formControlName="name" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Müşteri Maili</label>
+                            <input class="form-control form-control-lg form-control-solid" [(ngModel)]="customer.email"
+                                type="email" name="email" formControlName="email" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Müşteri Telefon Numarası</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="customer.phoneNumber" type="name" name="phoneNumber"
+                                formControlName="phoneNumber" autocomplete="off" />
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5">
+                                <ng-container>
+                                    <span class="indicator-label">Güncelle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- UserCreate -->
+<div class="modal fade" id="userCreate" tabindex="-1" aria-labelledby="userCreateLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userCreateLabel">Admin Oluştur</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <form class="form w-100" novalidate="novalidate" id="kt_user_create_form"
+                        [formGroup]="createUserForm" (ngSubmit)="createUser()">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Adı</label>
+                            <input class="form-control form-control-lg form-control-solid" type="firstName"
+                                name="firstName" formControlName="firstName" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Soyadı</label>
+                            <input class="form-control form-control-lg form-control-solid" type="lastName"
+                                name="lastName" formControlName="lastName" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Email</label>
+                            <input class="form-control form-control-lg form-control-solid" type="email" name="email"
+                                formControlName="email" autocomplete="off" />
+                        </div>
+                        <div class="row">
+                        </div>
+                        <div class="fv-row mb-10">
+                            <div class="d-flex justify-content-between mt-n5">
+                                <div class="d-flex flex-stack mb-2">
+                                    <label class="form-label fw-bolder text-dark fs-6 mb-0">Şifre</label>
+                                </div>
+                            </div>
+                            <input class="form-control form-control-lg form-control-solid" type="password"
+                                name="password" autocomplete="off" formControlName="password" />
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" id="kt_user_create_in_submit"
+                                class="btn btn-lg btn-primary w-100 mb-5">
+                                <ng-container>
+                                    <span class="indicator-label">Oluştur</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

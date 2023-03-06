@@ -37,21 +37,10 @@ export class UsersMovementsListComponent implements OnInit {
     private config: NgSelectConfig
   ) {
     this.config.notFoundText = 'Custom not found';
-    // this.config.appendTo = 'body';
-    // set the bindValue to global config when you use the same
-    // bindValue in most of the place.
-    // You can also override bindValue for the specified template
-    // by defining `bindValue` as property
-    // Eg : <ng-select bindValue="some-new-value"></ng-select>
     this.config.bindValue = 'value';
   }
 
   ngOnInit(): void {
-    // this.activatedRoute.params.subscribe((params) => {
-    //   if (params['studentId']) {
-    //     this.getUsersMovements(params['studentId']);
-    //   }
-    // }),
       (this.updateStudentsMovementForm = this.formBuilder.group({
         movementId: ['', Validators.required],
         repetitionNumber: [0, Validators.required],
@@ -60,18 +49,7 @@ export class UsersMovementsListComponent implements OnInit {
       console.log(this.days)
   }
 
-  // getUsersMovements(userId: number) {
-  //   this.usersMovementsService
-  //     .getUsersMovementsByUserId(this.page, this.pageSize, userId)
-  //     .subscribe((res) => {
-  //       this.usersMovements = res.items;
-  //       this.userId = userId;
-  //       console.log(res.items);
-  //       if (res.items.length > 0) {
-  //         this.userName = res.items[0].userName;
-  //       }
-  //     });
-  // }
+
   usersMovementsBySelectedDay: UsersMovementsDto[] = [];
   usersMovementsIsLoaded = false;
   getUsersMovementsBySelectedDay(userId: number, selectDay?: number) {

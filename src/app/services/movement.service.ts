@@ -16,8 +16,8 @@ export class MovementService {
     return this.http.get<ListResponseModel<Movement>>(API_URL+"Movements/GetList?"+"Page="+page+"&"+"PageSize="+pageSize+"&"+"CategoryId="+categoryId);
   }
 
-  createMovement(name:string){
-    return this.http.post<any>(API_URL+"Movements/Create",{name})
+  createMovement(name:string,description:string,categoryId:number){
+    return this.http.post<any>(API_URL+"Movements/Create",{name,description,categoryId})
   }
 
   updateMovement(movement:Movement){

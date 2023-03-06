@@ -23,8 +23,8 @@ export class UserService {
     return this.http.get<ListResponseModel<User>>(API_URL+"Users/GetStudentList?"+"Page="+page+"&"+"PageSize="+pageSize+"&"+"searchFirstName="+searchFirstName+"&"+"searchLastName="+searchLastName+"&status="+status);
   }
 
-  createUser(email:string,password:string,firstName:string,lastName:string,type:number,status:boolean,memberStartDate:string,memberEndDate:string){
-    return this.http.post<any>(API_URL+"Users/Create",{email,password,firstName,lastName,type,status,memberStartDate,memberEndDate})
+  createUser(email:string|null =null,password:string|null =null,firstName:string|null =null,lastName:string|null =null,customerId:number|null,type:number,status:boolean,memberStartDate:string|null,memberEndDate:string|null){
+    return this.http.post<any>(API_URL+"Users/Create",{email,password,firstName,lastName,customerId,type,status,memberStartDate,memberEndDate})
   }
 
   deleteUser(userId:number):Observable<any>{

@@ -50,27 +50,6 @@ export class MovementListComponent implements OnInit {
   get f() { return this.createMovementForm.controls; }
   
   get movementCategoryIdRequest() {return this.movementCategoryRequestForm.controls;}
-  
-  createMovement(){
-    if(this.createMovementForm.invalid) {
-      return;
-    }
-
-    // this.loading = true;
-    this.movementService.createMovement(this.f.name.value)
-    .pipe(first())
-    .subscribe(
-      data => {
-        this.toast.success("Başarılı")
-        console.log(data.userForRegisterDto)
-        // this.store.dispatch(addUser(data))
-        this.getMovements(0);
-      },
-      error => {
-         this.toast.error("Başarısız")
-      }
-    );
-  }
 
  
   getMovements(categoryId:number=0) {

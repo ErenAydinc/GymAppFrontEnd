@@ -9,7 +9,6 @@ import { MovementListComponent } from './movement/movement-list/movement-list.co
 import { NgImageSliderModule } from 'ng-image-slider';
 import { NgbAccordionModule, NgbCarouselModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { MovementCreateComponent } from './movement/movement-create/movement-create.component';
 import { StudentListComponent } from './user/student-list/student-list.component';
 import { StoreModule } from '@ngrx/store';
 import { PersonalTrainerListComponent } from './user/personalTrainer-list/personalTrainer-list.component';
@@ -21,7 +20,7 @@ import { PassiveStudentListComponent } from './user/passive-student-list/passive
 import { AdminPagesComponent } from './admin-pages.component';
 import { AdminPagesRoutingModule } from './admin-pages-routing.module';
 @NgModule({
-  declarations: [AdminPagesComponent,StudentCreateComponent,StudentListComponent, MovementListComponent, MovementCreateComponent,PersonalTrainerListComponent,PersonalTrainerCreateComponent, UsersMovementsListComponent, UsersMovementsCreateComponent, PassiveStudentListComponent],
+  declarations: [AdminPagesComponent,StudentCreateComponent,StudentListComponent, MovementListComponent,PersonalTrainerListComponent,PersonalTrainerCreateComponent, UsersMovementsListComponent, UsersMovementsCreateComponent, PassiveStudentListComponent],
   imports: [
     CommonModule,
     FormsModule,

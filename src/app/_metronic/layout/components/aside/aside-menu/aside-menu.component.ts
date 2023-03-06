@@ -20,11 +20,11 @@ export class AsideMenuComponent implements OnInit {
   }
   logOut() {
     localStorage.removeItem('currentUser');
-    this.router.navigate(["auth/login"])
   }
   localStorageUser: Login;
   isAdmin = false;
   isPersonalTrainer = false;
+  isSystemAdmin=false;
   userOperationClaimControl() {
     const currentUser = this.authService.currentUserValue;
 
@@ -33,8 +33,10 @@ export class AsideMenuComponent implements OnInit {
         this.isAdmin = true;
       } else if (userOperationClaim.operationClaimId == 3) {
         this.isPersonalTrainer = true;
-      } else {
-        console.log('Yetkiniz yok');
+      } else if(userOperationClaim.operationClaimId == 1) {
+        this.isSystemAdmin=true
+      }else{
+        console.log("Yetkiniz yok")
       }
     });
 

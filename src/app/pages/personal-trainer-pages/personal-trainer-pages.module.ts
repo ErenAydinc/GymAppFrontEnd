@@ -11,7 +11,6 @@ import { WidgetsModule } from 'src/app/_metronic/partials/content/widgets/widget
 import { UsersMovementsListComponent } from './users-movements/users-movements-list/users-movements-list.component';
 import { UsersMovementsCreateComponent } from './users-movements/users-movements-create/users-movements-create.component';
 import { MovementListComponent } from './movement/movement-list/movement-list.component';
-import { MovementCreateComponent } from './movement/movement-create/movement-create.component';
 import { NgbCarouselModule, NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 
 
@@ -22,7 +21,6 @@ import { NgbCarouselModule, NgbAccordionModule } from '@ng-bootstrap/ng-bootstra
     UsersMovementsListComponent,
     UsersMovementsCreateComponent,
     MovementListComponent,
-    MovementCreateComponent
   ],
   imports: [
     CommonModule,

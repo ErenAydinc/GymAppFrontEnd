@@ -1,0 +1,89 @@
+
+<div class="card shadow-lg" style="margin-bottom:20px ;">
+    <div class="card-header" style="border-bottom: 0px;">
+        <div class="card-title">
+            <h3 class="card-label">
+                Movements
+                <!-- <small>sub title</small> -->
+            </h3>
+            <app-movement-create></app-movement-create>
+        </div>
+        
+        <div style="position: relative;padding-top:1.2%;" class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Filter
+            </button>
+            <div  class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button (click)="getMovements(0)" class="dropdown-item" href="#">Movements</button>
+                <button *ngFor="let category of categories " (click)="getMovements(category.id)" class="dropdown-item" href="#">{{category.name}}</button>
+            </div>
+           
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xxl-4" *ngFor="let movement of movements | paginate:{itemsPerPage:pageSize,
+        currentPage:page,
+        totalItems:count
+    } let i = index">
+        <div class="card card-xxl-stretch mb-xl-3">
+            <div class="card-header">
+                <h3 class="card-title">{{movement.name}}</h3>
+            </div>
+            <div class="card-body">
+                <ngb-carousel>
+                    <ng-template ngbSlide *ngFor="let movementImage of movement.movementImage">
+                        <div class="picsum-img-wrapper">
+                            <img src="{{imageBasePath}}/{{movementImage.imagePath}}" style="max-height: 300px;max-width: 100%;min-height: 300px;min-width: 100%;"
+                                alt="Random first slide" />
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
+              
+                <div style="margin-top: 5px;"  *ngIf="movement.movementImage==null || movement.movementImage.length<3">
+                    <form [formGroup]="myForm" (ngSubmit)="submit(movement.id)">
+                        <div class="form-group">
+                            <input formControlName="file" id="file" type="file" multiple class="form-control"
+                                (change)="onFileChange($event)">
+                        </div>
+
+                        <button class="btn btn-success"
+                            type="submit">Submit</button>
+                    </form>
+                </div>
+            </div>
+            <div class="card-footer">
+                <h5> Description</h5>
+                <div style="margin-top: 5%;">
+                
+                <span style="font-size: medium;">{{movement.description}}</span>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card shadow-lg" style="margin-top: 2%; padding: 0.5%;">
+    <div class="row">
+        <div class="col-md-4 col-xxl-3">
+            <select class="form-control form-control-sm font-weight-bold mr-4 border-0 bg-light" style="width: 75px;"
+                (change)="onTableSizeChange($event)">
+                <option *ngFor="let size of tableSizes">
+                    {{size}}
+                </option>
+            </select>
+        </div>
+        <div class="col-md-4 col-xxl-3" style="position: absolute; left: 84%;top:25%;">
+            <pagination-controls class="my-pagination" previousLabel="Prev" nextLabel="Next"
+                (pageChange)="onTableDataChange($event)">
+
+            </pagination-controls>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .my-pagination ::ng-deep .ngx-pagination .current {
+        border-radius: 10px;
+    }
+</style>

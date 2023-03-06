@@ -24,7 +24,6 @@ const routes: Routes = [
       },
       {
         path: 'personaltrainers',
-        canActivate:[AdminGuard],
         component: PersonalTrainerListComponent,
       },
       {

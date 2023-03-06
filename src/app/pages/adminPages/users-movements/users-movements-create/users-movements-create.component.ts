@@ -59,7 +59,7 @@ export class UsersMovementsCreateComponent implements OnInit {
       )
       .subscribe(
         (res) => {
-          this.usersMovementListComponent.getUsersMovements(this.userId);
+          this.usersMovementListComponent.getUsersMovementsBySelectedDay(this.userId);
           this.toast.success('Öğrenciye Hareket Atandı');
         },
         (error) => {

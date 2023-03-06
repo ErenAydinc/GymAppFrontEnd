@@ -12,7 +12,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    // canActivate: [AdminGuard],
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./_metronic/layout/layout.module').then((m) => m.LayoutModule),
   },
