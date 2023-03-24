@@ -25,6 +25,7 @@ export class UsersMovementsCreateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.userId);
     this.createUsersMovementForm = this.formBuilder.group({
       movementId: [0, Validators.required],
       setNumber: [0, Validators.required],
@@ -63,7 +64,7 @@ export class UsersMovementsCreateComponent implements OnInit {
     if (this.createUsersMovementForm.invalid) {
       return;
     }
-
+ console.log(this.userId)
     this.usersMovementsService
       .usersMovementsCreate(
         this.userId,

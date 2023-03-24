@@ -2714,13 +2714,6 @@
     "svg.resize.js" "^1.4.3"
     "svg.select.js" "^3.0.1"
 
-"apollo-angular@^4.2.0":
-  "integrity" "sha512-P0kNcDnaAtV1Tu7YChY8/No+GS8B1Fsimo/Sx4WoH86n2xweQXzwmxAiNCDnmwn8GRduRP4AiotdeLpFxHPyvA=="
-  "resolved" "https://registry.npmjs.org/apollo-angular/-/apollo-angular-4.2.0.tgz"
-  "version" "4.2.0"
-  dependencies:
-    "tslib" "^2.0.0"
-
 "aproba@^1.0.3 || ^2.0.0":
   "integrity" "sha512-lYe4Gx7QT+MKGbDsA+Z+he/Wtef0BiwDOlK/XkBrdfsh9J/jPPXbX0tE9x9cl27Tmu5gg3QUbUrQYa/y+KOHPQ=="
   "resolved" "https://registry.npmjs.org/aproba/-/aproba-2.0.0.tgz"
@@ -4118,11 +4111,6 @@
   "version" "2.12.6"
   dependencies:
     "tslib" "^2.1.0"
-
-"graphql@^16.6.0":
-  "integrity" "sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw=="
-  "resolved" "https://registry.npmjs.org/graphql/-/graphql-16.6.0.tgz"
-  "version" "16.6.0"
 
 "handle-thing@^2.0.0":
   "integrity" "sha512-9Qn4yBxelxoh2Ow62nP+Ka/kMnOXRi8BXnRaUwezLNhqelnN49xKz4F/dPP8OYLxLxq6JDtZb2i9XznUQbNPTg=="

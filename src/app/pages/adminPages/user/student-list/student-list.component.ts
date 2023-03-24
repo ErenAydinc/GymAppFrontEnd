@@ -195,42 +195,6 @@ export class StudentListComponent implements OnInit {
     return this.updateBodyInformationForm.controls;
   }
 
-  createOrUpdateBodyInformation() {
-    if (this.bodyInformationDto == null) {
-      if (this.createBodyInformationForm.invalid) {
-        return;
-      }
-      this.bodyInformationService
-        .create(
-          this.bodyInformationUserId,
-          this.fCreateBodyInfo.length.value,
-          this.fCreateBodyInfo.weight.value,
-          this.fCreateBodyInfo.arm.value,
-          this.fCreateBodyInfo.shoulder.value,
-          this.fCreateBodyInfo.leg.value,
-          this.fCreateBodyInfo.chest.value
-        )
-        .subscribe((res) => {
-          this.toast.info('Vücut Bilgileri Girildi');
-        });
-    } else {
-      this.bodyInformationService
-        .update(
-          this.bodyInformationDto.id,
-          this.bodyInformationUserId,
-          this.fUpdateBodyInfo.length.value,
-          this.fUpdateBodyInfo.weight.value,
-          this.fUpdateBodyInfo.arm.value,
-          this.fUpdateBodyInfo.shoulder.value,
-          this.fUpdateBodyInfo.leg.value,
-          this.fUpdateBodyInfo.chest.value
-        )
-        .subscribe((res) => {
-          this.toast.info('Vücut Bilgileri Güncellendi');
-        });
-    }
-  }
-
   createBodyInformation() {
     if (this.createBodyInformationForm.invalid) {
       return;

@@ -1,7 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { HttpLink } from 'apollo-angular/http';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ListResponseModel } from '../models/listResponseModel';

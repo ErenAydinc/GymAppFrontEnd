@@ -22,7 +22,7 @@ export const routes: Routes = [
       import('./modules/errors/errors.module').then((m) => m.ErrorsModule),
   },
   // { path: '**', redirectTo: 'error/404' },
-  { path: '**', redirectTo: 'auth/login' },
+   localStorage.getItem('currentUser') ?{ path: '**', redirectTo: '' }  :{ path: '**', redirectTo: 'auth/login' },
 ];
 
 @NgModule({

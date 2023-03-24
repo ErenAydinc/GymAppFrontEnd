@@ -26,7 +26,7 @@ export class MovementListComponent implements OnInit {
   tableSizes: any = [10, 20, 50, 100];
   newUser: any;
   categoryId=0
-  imageBasePath="https://localhost:7087"
+  imageBasePath="https://localhost:44370"
 
   movementCategoryRequestForm:FormGroup;
   createMovementForm: UntypedFormGroup;

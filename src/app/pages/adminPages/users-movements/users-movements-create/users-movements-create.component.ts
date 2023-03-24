@@ -29,6 +29,14 @@ export class UsersMovementsCreateComponent implements OnInit {
       movementId: [0, Validators.required],
       setNumber: [0, Validators.required],
       repetitionNumber: [0, Validators.required],
+      weight:[0,Validators.required],
+      isMonday:[Boolean],
+      isTuesday:[Boolean],
+      isWednesday:[Boolean],
+      isThurday:[Boolean],
+      isFriday:[Boolean],
+      isSaturday:[Boolean],
+      isSunday:[Boolean]
     });
   }
 
@@ -45,6 +53,12 @@ export class UsersMovementsCreateComponent implements OnInit {
     return this.createUsersMovementForm.controls;
   }
 
+  checkedDay:number
+  setCheckedDay(checkedDayIndex:number){
+      this.checkedDay=checkedDayIndex
+      console.log(checkedDayIndex)
+  }
+
   create() {
     if (this.createUsersMovementForm.invalid) {
       return;
@@ -55,7 +69,15 @@ export class UsersMovementsCreateComponent implements OnInit {
         this.userId,
         this.f.movementId.value,
         this.f.setNumber.value,
-        this.f.repetitionNumber.value
+        this.f.repetitionNumber.value,
+        this.f.weight.value,
+        this.checkedDay==1?true:false,
+        this.checkedDay==2?true:false,
+        this.checkedDay==3?true:false,
+        this.checkedDay==4?true:false,
+        this.checkedDay==5?true:false,
+        this.checkedDay==6?true:false,
+        this.checkedDay==7?true:false,
       )
       .subscribe(
         (res) => {

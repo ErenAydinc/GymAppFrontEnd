@@ -8,24 +8,6 @@
         </div>
     </div>
     <div class="card-body">
-        <!-- <form [formGroup]="getPersonalTrainerStudentsForm" (ngSubmit)="getPersonalTrainerStudentByPersonalTrainerId()">
-            <div class="row">
-                <div class="col-md-4" style="width: 15%;">
-                    <label>Adı</label>
-                    <input type="text" formControlName="searchFirstName" class="form-control" name="searhFirstName"
-                        placeholder="Search..." />
-                </div>
-                <div class="col-md-4" style="width: 15%;">
-                    <label>Soyadı</label>
-                    <input type="text" formControlName="searchLastName" class="form-control" name="searhFirstName"
-                        placeholder="Search..." />
-                </div>
-                <button class="btn btn-sm btn-primary col-md-4"
-                    style="width: 5%; height: 3%;position: sticky;top: 30%;">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </form> -->
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -44,6 +26,12 @@
                     <td>{{personalTrainerStudentDto.studentLastName}}</td>
                     <td>{{personalTrainerStudentDto.studentEmail}}</td>
                     <td>
+                        <!-- Body Information -->
+                        <button class="btn btn-sm btn-success w-1 mb-0"
+                            (click)="getBodyInformationByUserId(personalTrainerStudentDto.studentId)"
+                            data-toggle="modal" data-target="#studentBodyInfo" style="margin-left: 2%;">
+                            <i class="fas fa-ruler" style="color: white;display: contents;"></i>
+                        </button>
                         <!-- user's Movements    -->
                         <button class="btn btn-sm btn-info w-1 mb-0" style="margin-left: 2%;"
                             routerLink="/gymapp/personaltrainer/studentsmovements/{{personalTrainerStudentDto.studentId}}">
@@ -78,3 +66,118 @@
     }
 </style>
 
+
+
+<!-- EditModal Student Body Info -->
+<div class="modal fade" id="studentBodyInfo" tabindex="-1" aria-labelledby="studentBodyInfo" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="studentBodyInfo">Body Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" *ngIf="isBodyInformationLoaded">
+                <div *ngIf="bodyInformationDto!=null">
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="updateBodyInformationForm"
+                        (ngSubmit)="updateBodyInformation()">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Uzunluk (173)</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.length" type="number" name="length"
+                                formControlName="length" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Kilo (93.2)</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.weight" type="number" name="weight"
+                                formControlName="weight" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Kol</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.arm" type="number" name="arm" formControlName="arm"
+                                autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Omuz</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.shoulder" type="number" name="shoulder"
+                                formControlName="shoulder" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Göğüs</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.chest" type="number" name="chest"
+                                formControlName="chest" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Bacak</label>
+                            <input class="form-control form-control-lg form-control-solid"
+                                [(ngModel)]="bodyInformationDto.leg" type="number" name="leg" formControlName="leg"
+                                autocomplete="off" />
+                        </div>
+
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5"
+                                [disabled]="updateBodyInformationForm.invalid">
+                                <ng-container>
+                                    <span class="indicator-label">Ekle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+                <div *ngIf="bodyInformationDto==null">
+                    <form class="form w-100" novalidate="novalidate" [formGroup]="createBodyInformationForm"
+                        (ngSubmit)="createBodyInformation()">
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Uzunluk (173)</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="length"
+                                formControlName="length" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Kilo (93.2)</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="weight"
+                                formControlName="weight" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Kol</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="arm"
+                                formControlName="arm" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Omuz</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="shoulder"
+                                formControlName="shoulder" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Göğüs</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="chest"
+                                formControlName="chest" autocomplete="off" />
+                        </div>
+                        <div class="fv-row mb-10">
+                            <label class="form-label fs-6 fw-bolder text-dark">Bacak</label>
+                            <input class="form-control form-control-lg form-control-solid" type="number" name="leg"
+                                formControlName="leg" autocomplete="off" />
+                        </div>
+                        <!--begin::Action-->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-lg btn-primary w-100 mb-5"
+                                [disabled]="createBodyInformationForm.invalid">
+                                <ng-container>
+                                    <span class="indicator-label">Ekle</span>
+                                </ng-container>
+                            </button>
+                        </div>
+                        <!--end::Action-->
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -45,7 +45,11 @@ export class UsersMovementsListComponent implements OnInit {
         movementId: ['', Validators.required],
         repetitionNumber: [0, Validators.required],
         setNumber: [0, Validators.required],
+        weight : [0],
       }));
+      this.activatedRoute.params.subscribe((params) => {
+        this.userId = params['studentId'];
+      }),
       console.log(this.days)
   }
 
@@ -53,14 +57,11 @@ export class UsersMovementsListComponent implements OnInit {
   usersMovementsBySelectedDay: UsersMovementsDto[] = [];
   usersMovementsIsLoaded = false;
   getUsersMovementsBySelectedDay(userId: number, selectDay?: number) {
-    this.activatedRoute.params.subscribe((params) => {
-      userId = params['studentId'];
-    }),
       this.usersMovementsService
         .getUsersMovementsByUserIdAndSelectedDay(
           this.page,
           this.pageSize,
-          userId,
+          this.userId,
           selectDay
         )
         .subscribe((res) => {
@@ -95,7 +96,8 @@ export class UsersMovementsListComponent implements OnInit {
         userId,
         this.f.movementId.value,
         this.f.setNumber.value,
-        this.f.repetitionNumber.value
+        this.f.repetitionNumber.value,
+        this.f.weight.value
       )
       .subscribe((res) => {
         this.toast.info('Güncellendi');

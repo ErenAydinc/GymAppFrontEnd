@@ -1,5 +1,5 @@
-import { StudentCreateComponent } from './user/student-create/student-create.component';
 
+import { StudentCreateComponent } from './user/student-create/student-create.component'
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WidgetsModule } from 'src/app/_metronic/partials/content/widgets/widgets.module';

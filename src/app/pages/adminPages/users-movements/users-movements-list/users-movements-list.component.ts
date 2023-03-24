@@ -44,6 +44,7 @@ export class UsersMovementsListComponent implements OnInit {
         movementId: ['', Validators.required],
         repetitionNumber: [0, Validators.required],
         setNumber: [0, Validators.required],
+        weight: [0],
       }));
   }
 
@@ -92,7 +93,8 @@ export class UsersMovementsListComponent implements OnInit {
         userId,
         this.f.movementId.value,
         this.f.setNumber.value,
-        this.f.repetitionNumber.value
+        this.f.repetitionNumber.value,
+        this.f.weight.value,
       )
       .subscribe((res) => {
         this.toast.info('Güncellendi');

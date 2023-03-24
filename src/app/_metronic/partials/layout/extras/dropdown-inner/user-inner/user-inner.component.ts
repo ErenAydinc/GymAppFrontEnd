@@ -24,6 +24,7 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+    localStorage.removeItem('currentUser')
     document.location.reload();
   }
 

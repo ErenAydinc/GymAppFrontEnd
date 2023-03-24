@@ -26,8 +26,8 @@ export class UsersMovementsService {
   usersMovementsDelete(id:number){
     return this.http.delete<any>(API_URL+"UsersMovements/Delete",{body:{id:id}})
   }
-  usersMovementsUpdate(id:number,userId:number,movementId:number,setNumber:number,repetitionNumber:number){
-    return this.http.put<any>(API_URL+"UsersMovements/Update",{id,userId,movementId,setNumber,repetitionNumber})
+  usersMovementsUpdate(id:number,userId:number,movementId:number,setNumber:number,repetitionNumber:number,weight:number){
+    return this.http.put<any>(API_URL+"UsersMovements/Update",{id,userId,movementId,setNumber,repetitionNumber,weight})
   }
 
   getUsersMovementsByUserIdAndSelectedDay(page:number,pageSize:number,userId?:number,selectedDay?:number):Observable<ListResponseModel<UsersMovementsDto>>{

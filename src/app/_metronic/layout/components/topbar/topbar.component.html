@@ -98,7 +98,11 @@
     data-kt-menu-placement="bottom-end"
     data-kt-menu-flip="bottom"
   >
-    <img src="./assets/media/avatars/150-2.jpg" alt="metronic" />
+  <span class="symbol symbol-35 symbol-light-primary">
+    <span class="symbol-label font-size-h5 font-weight-bold" *ngIf="isAdmin==true">A</span>
+    <span class="symbol-label font-size-h5 font-weight-bold" *ngIf="isPersonalTrainer==true">P</span>
+    <span class="symbol-label font-size-h5 font-weight-bold" *ngIf="isSystemAdmin==true">S</span>
+  </span>
   </div>
   <!-- end::Toggle  -->
   <app-user-inner></app-user-inner>

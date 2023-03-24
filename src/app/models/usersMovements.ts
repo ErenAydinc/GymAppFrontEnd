@@ -5,6 +5,7 @@ export class UsersMovements{
     movementId:number
     setNumber:number
     repetitionNumber:number
+    weight:number
 }
 
 export class UsersMovementsDto{

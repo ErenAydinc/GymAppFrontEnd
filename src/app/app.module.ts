@@ -1,5 +1,3 @@
-import { HttpLink } from 'apollo-angular/http';
-import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { NgModule, APP_INITIALIZER, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,7 +11,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 // #fake-start#
-import { FakeAPIService } from './_fake/fake-api.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { JwtInterceptor } from './helpers/jwt.interceptors';
 import { ErrorInterceptor } from './helpers/error.interceptor';
@@ -31,16 +28,7 @@ import { InMemoryCache } from '@apollo/client/core';
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
     HttpClientModule,
-    ApolloModule,
     ClipboardModule,
-    // #fake-start#
-    environment.isMockEnabled
-      ? HttpClientInMemoryWebApiModule.forRoot(FakeAPIService, {
-          passThruUnknownUrl: true,
-          dataEncapsulation: false,
-        })
-      : [],
-    // #fake-end#
     InlineSVGModule.forRoot(),
     NgbModule,
     ToastrModule.forRoot({
@@ -50,18 +38,6 @@ import { InMemoryCache } from '@apollo/client/core';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   providers: [
-    {
-      provide: APOLLO_OPTIONS,
-      useFactory(httpLink: HttpLink) {
-        return {
-          cache: new InMemoryCache(),
-          link: httpLink.create({
-            uri: 'https://localhost:7087/api/',
-          }),
-        };
-      },
-      deps: [HttpLink],
-    },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
